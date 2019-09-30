@@ -1,0 +1,40 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+library(igraph)
+# load raw network data ----
+A <- utils::read.table(file = '/Users/maxs/Documents/Blockseminare/Edge Gesamt - Tabellenblatt1.csv',
+                header = TRUE, sep = ',', quote = '', stringsAsFactors = FALSE)
+# create network ----
+g <- graph_from_data_frame(A,directed = TRUE)
+# load raw attribute data ----
+attrs <- utils::read.table(file = '/Users/maxs/Documents/Blockseminare/Note Gesamt - Tabellenblatt1.csv',
+                    header = TRUE, sep = ',', quote = '', stringsAsFactors = FALSE)
+# add attributes to network ----
+vnames <- get.vertex.attribute(g,'name')
+identCol <- which(apply(attrs,2,function(x) all(x%in%vnames)))[1]
+perm <- match(vnames,anames)
+for(attr in names(attr)){
+   g <- set_vertex_attr(g,name = attr,value = attr[[attr]][perm])
+   
+   
+}
+# Ergänzung: Erste Visualisierung des Netzwerks
+
+g
+plot(g)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
