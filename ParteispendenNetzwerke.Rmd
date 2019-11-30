@@ -1,0 +1,351 @@
+---
+title: "lobby"
+output: html_notebook
+---
+
+
+```{r}
+library(igraph)
+# TEST TEST TEST igraph Objekt erstellen aus igraph Objekt
+edges <- read.csv("https://raw.githubusercontent.com/Maxshh/Lobby-/master/EdgeGesamt_Beta2.7%20-%20Tabellenblatt1.csv", header=T, as.is=T)
+nodes <- read.csv("https://raw.githubusercontent.com/Maxshh/Lobby-/master/NoteGesamt_Beta2.7%20-%20Tabellenblatt1.csv", header=T, as.is=T)
+ties <-as.matrix(edges)
+summary(g)
+edge_attr(g)
+vertex_attr(g)
+
+
+plot(g)
+
+
+g <- graph_from_data_frame(d=ties, vertices=nodes, directed=T)
+g
+
+```
+
+
+```{r}
+
+library(igraph)
+# igraph Objekt erstellen aus igraph Objekt
+edges <- read.csv("https://raw.githubusercontent.com/Maxshh/Lobby-/master/EdgeGesamt_Beta2.7%20-%20Tabellenblatt1.csv", header=T, as.is=T)
+nodes <- read.csv("https://raw.githubusercontent.com/Maxshh/Lobby-/master/NoteGesamt_Beta2.7%20-%20Tabellenblatt1.csv", header=T, as.is=T)
+ties <-as.matrix(edges)
+summary(g)
+edge_attr(g)
+vertex_attr(g)
+
+
+
+g <- graph_from_data_frame(d=ties, vertices=nodes, directed=T)
+g
+
+
+E(g)$weight
+g_gewicht <- E(g)$weight
+
+#Netzwerkmaße
+edge_density(g) #Dichte des Netzwerks 
+centr_degree(g, mode = c("all"), loops = TRUE, normalized = TRUE)
+mean_distance(g)
+ecount(g)
+vcount(g)
+
+g_gewicht
+
+#Visualisierungsparameter
+V(g)$size = 2
+V(g)$color = "red"
+
+E(g)$size = .1
+E(g)$arrow.size <- .1
+E(g)$color="lightblue"
+E(g)$width = 2
+E(g)$curved=.2
+edge_density= g_gewicht #Dichte des Netzwerks 
+
+
+
+plot(g)
+?igraph.plotting
+
+plot(g, layout=layout_with_graphopt, main="Graphhopt - Gesamtnetzwerk", )
+
+#TEST
+plot(g, layout=layout_with_fr, main="Fruchterman-Rheingold")
+plot(g, layout=layout_nicely, main="Nicely")
+plot(g, layout=layout_with_gem, main="GEM")
+
+
+
+```
+
+
+
+
+
+
+
+```{r CDU-Spendennetzwerk erstellen}
+
+cdu_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "CDU", mode ="in")
+cdu_sg
+
+plot(cdu_sg[[1]], main="CDU Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+cdu_spenden <- csu_sg[[1]]
+cdu_spenden
+
+E(cdu_spenden)$weight
+cdu_gewicht <- E(cdu_spenden)$weight
+cdu_gewicht
+
+ecount(cdu_spenden) #edges zählen
+vcount(cdu_spenden) #vertices zählen
+edge_density(cdu_spenden) #Dichte des Netzwerks 
+centr_degree(cdu_spenden, mode = c("all"), loops = TRUE, normalized = TRUE)
+cdu_degree <- degree(cdu_spenden)
+degree(g)
+
+#Visualisierungsparameter
+E(cdu_spenden)$curved=.2
+edge_density= g_gewicht  #Dichte des Netzwerks nach Gewicht 
+edge_density(cdu_spenden)
+cdu_spenden
+
+
+```
+
+
+```{r}
+cdu_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "CDU", mode ="in")
+cdu_sg
+
+plot(cdu_sg[[1]], main="CDU Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+cdu_spenden <- csu_sg[[1]]
+cdu_spenden
+
+E(cdu_spenden)$weight
+cdu_gewicht <- E(cdu_spenden)$weight
+cdu_gewicht
+
+ecount(cdu_spenden) #edges zählen
+vcount(cdu_spenden) #vertices zählen
+edge_density(cdu_spenden) #Dichte des Netzwerks 
+centr_degree(cdu_spenden, mode = c("all"), loops = TRUE, normalized = TRUE)
+cdu_degree <- degree(cdu_spenden)
+
+#Visualisierungsparameter
+E(cdu_spenden)$curved=.2
+
+
+cdu_spenden
+
+```
+
+
+
+
+```{r CSU Netzwerk Spenden}
+
+csu_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "CSU", mode ="in")
+csu_sg
+
+plot(csu_sg[[1]], main="CSU Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+csu_spenden <- csu_sg[[1]]
+csu_spenden
+
+E(csu_spenden)$weight
+csu_gewicht <- E(csu_spenden)$weight
+csu_gewicht
+
+ecount(csu_spenden) #edges zählen
+vcount(csu_spenden) #vertices zählen
+edge_density(csu_spenden) #Dichte des Netzwerks 
+centr_degree(csu_spenden, mode = c("all"), loops = TRUE, normalized = TRUE)
+csu_degree <- degree(csu_spenden)
+csu_degree
+
+
+
+```
+
+
+
+```{r}
+
+spd_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "SPD", mode ="in")
+spd_sg
+
+plot(spd_sg[[1]], main="SDP Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+spd_spenden <- spd_sg[[1]]
+spd_spenden
+
+#Kategorisierung nach Gewicht
+E(spd_spenden)$weight
+spd_gewicht <- E(spd_spenden)$weight
+spd_gewicht
+
+ecount(spd_spenden) #edges zählen
+vcount(spd_spenden) #vertices zählen
+edge_density(spd_spenden) #Dichte des Netzwerks 
+
+centr_degree(spd_spenden, mode = c("all"), loops = TRUE, normalized = TRUE)
+
+
+#Visualisiergungsparameter 
+E(spd_spenden)$curved=.2
+edge_density= spd_gewicht  #Dichte des Netzwerks nach Gewicht 
+
+spd_degree <- degree(spd_spenden)
+spd_spenden
+
+```
+
+```{r}
+fdp_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "FDP", mode ="in")
+fdp_sg
+
+plot(fdp_sg[[1]], main="FDP Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+fdp_spenden <- fdp_sg[[1]]
+fdp_spenden
+
+#Kategoriesierung nach Gewicht
+E(fdp_spenden)$weight
+fdp_gewicht <- E(fdp_spenden)$weight
+fdp_gewicht
+
+
+ecount(fdp_spenden) #edges zählen
+vcount(fdp_spenden) #vertices zählen
+edge_density(fdp_spenden) #Dichte des Netzwerks 
+
+#Visualisiergungsparameter 
+E(fdp_spenden)$curved=.2
+edge_density= fdp_gewicht  #Dichte des Netzwerks nach Gewicht 
+
+fdp_degree <- degree(fdp_spenden)
+fdp_degree
+
+fdp_spenden
+
+
+
+```
+
+```{r}
+
+afd_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "AFD", mode ="in")
+afd_sg
+
+plot(afd_sg[[1]], main="AFD Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+afd_spenden <- afd_sg[[1]]
+afd_spenden
+
+
+E(afd_spenden)$weight
+afd_gewicht <- E(afd_spenden)$weight
+afd_gewicht
+
+
+ecount(afd_spenden) #edges zählen
+vcount(afd_spenden) #vertices zählen
+edge_density(afd_spenden) #Dichte des Netzwerks 
+
+afd_degree <- degree(afd_spenden)
+afd_degree
+
+afd_spenden
+
+```
+```{r}
+
+grun_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "GRUN", mode ="in")
+grun_sg
+
+plot(grun_sg[[1]], main="Grüne Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+grun_spenden <- grun_sg[[1]]
+grun_spenden
+
+E(grun_spenden)$weight
+grun_gewicht <- E(grun_spenden)$weight
+grun_gewicht
+# gewichte nicht in absoluten Zahlen, sondern in Kategorien von 1-5, dann ist eine einfachere Kategorisierung 
+
+
+ecount(grun_spenden) #edges zählen
+vcount(grun_spenden) #vertices zählen
+edge_density(grun_spenden) #Dichte des Netzwerks 
+
+grun_degree <- degree(grun_spenden)
+grun_degree
+
+grun_spenden
+
+```
+
+```{r}
+
+linke_sg <- make_ego_graph(g, order = 1, nodes = V(g)$name == "LINK", mode ="in")
+linke_sg
+
+plot(linke_sg[[1]], main="LINKE Spenden", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+linke_spenden <- linke_sg[[1]]
+linke_spenden
+
+E(linke_spenden)$weight
+linke_gewicht <- E(linke_spenden)$weight
+linke_gewicht
+# gewichte nicht in absoluten Zahlen, sondern in Kategorien von 1-5, dann ist eine einfachere Kategorisierung 
+
+
+ecount(linke_spenden) #edges zählen
+vcount(linke_spenden) #vertices zählen
+edge_density(linke_spenden) #Dichte des Netzwerks 
+linke_degree <- degree(linke_spenden)
+linke_degree
+
+```
+
+```{r}
+#Gescheiterter versuch, nach Ego-Netzwerk nach einzelnen Jahren zu erstellen 
+year1_sg <- make_ego_graph(g, order = 1, nodes = V(g)$year == "1", mode ="in")
+year1_sg
+
+plot(year1_sg[[1]], main="Year1", edge.arrow.size=.3)
+
+# igraph objekt aus Ego-Netzwerk erstellen (immer mit der 1)
+linke_spenden <- year1_sg[[1]]
+year1_spenden
+
+E(linke_spenden)$weight
+linke_gewicht <- E(linke_spenden)$weight
+linke_gewicht
+
+
+ecount(linke_spenden) #edges zählen
+vcount(linke_spenden) #vertices zählen
+edge_density(linke_spenden) #Dichte des Netzwerks 
+linke_degree <- degree(linke_spenden)
+linke_degree
+
+
+```
+
+
+
